@@ -21,9 +21,6 @@
         return authCode;
     }
 
-    onMount(() => {
-    })
-
     function exchangeCodeForToken(code){
         const tokenReq = new URLSearchParams({grant_type: 'authorization_code', 
                                         code: code, 
