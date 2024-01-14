@@ -1,11 +1,31 @@
 import type { Writable } from 'svelte/store';
 import { writable } from 'svelte/store';
-import type { Todo } from './types';
+import type { Todo } from './todo';
+import { todosFromJSON, todosToJSON } from './todo';
 import type { Dayjs } from 'dayjs';
 
 function createTodoStore() {
 	const todoStore: Writable<Todo[]> = writable([]);
 	const { subscribe, set, update } = todoStore;
+
+	const updateFromLocalStorage = () => {
+		const fromLocal = todosFromJSON(localStorage.getItem('todos') || '[]')
+		console.log(fromLocal)
+		console.log('updateFromLocalStorage')
+		set(fromLocal);
+	};
+
+	const updatePlusLocalStorage = (fn: (todos: Todo[]) => Todo[]) => {
+		update((todos) => {
+			const newTodos = fn(todos);
+			localStorage.setItem('todos', todosToJSON(newTodos));
+			return newTodos;
+		});
+
+		const fromLocal = todosFromJSON(localStorage.getItem('todos') || '[]')
+		console.log('updatePlusLocalStorage')
+		console.log(fromLocal)
+	}
 
 	const createTodo = (text: string) => {
 		const todo = {
@@ -15,11 +35,11 @@ function createTodoStore() {
 			date: null
 		};
 
-		update((todos) => [...todos, todo]);
+		updatePlusLocalStorage((todos) => [...todos, todo]);
 	};
 
 	const toggleTodo = (id: number) => {
-		update((todos) => {
+		updatePlusLocalStorage((todos) => {
 			return todos.map((todo: Todo) =>
 				todo.id === id ? { ...todo, completed: !todo.completed } : todo
 			);
@@ -27,32 +47,31 @@ function createTodoStore() {
 	};
 
 	const deleteTodo = (id: number) => {
-		update((todos) => {
+		updatePlusLocalStorage((todos) => {
 			return todos.filter((todo: Todo) => todo.id !== id);
 		});
 	};
 
 	const editTodoText = (id: number, text: string) => {
-		update((todos) => {
+		updatePlusLocalStorage((todos) => {
 			return todos.map((todo: Todo) => (todo.id === id ? { ...todo, text } : todo));
 		});
 	};
 
 	const editTodoDate = (id: number, date: Dayjs) => {
-		update((todos) => {
+		updatePlusLocalStorage((todos) => {
 			return todos.map((todo: Todo) => (todo.id === id ? { ...todo, date } : todo));
 		});
 	};
 
 	return {
 		subscribe,
-		set,
-		update,
 		createTodo,
 		toggleTodo,
 		deleteTodo,
 		editTodoText,
-		editTodoDate
+		editTodoDate,
+		updateFromLocalStorage
 	};
 }
 

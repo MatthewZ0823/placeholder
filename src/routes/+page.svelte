@@ -5,7 +5,7 @@
 	import todoStore from '$lib/store';
 
 	onMount(() => {
-		todoStore.createTodo('silly qwirky amongus');
+		todoStore.updateFromLocalStorage();
 	});
 </script>
 
