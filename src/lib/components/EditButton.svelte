@@ -2,7 +2,7 @@
 	import EditIcon from '$lib/assets/edit.svg';
 	import CheckmarkIcon from '$lib/assets/checkmark.svg';
 	import todoStore from '$lib/store';
-	import type { Todo } from '$lib/types';
+	import type { Todo } from '$lib/todo';
 	import dayjs from 'dayjs';
 
 	export let todo: Todo;

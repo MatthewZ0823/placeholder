@@ -1,7 +1,7 @@
 <script lang="ts">
 	import todoStore from '$lib/store';
 	import EditButton from '$lib/components/EditButton.svelte';
-	import type { Todo } from '$lib/types';
+	import type { Todo } from '$lib/todo';
 	export let todo: Todo;
 
 	let hovering = false;

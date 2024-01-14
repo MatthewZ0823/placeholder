@@ -8,9 +8,9 @@
     let token = null; //after onMount, this becomes the access token used to access data from the user
 
 	onMount(() => {
-		todoStore.createTodo('silly qwirky amongus');
         code = handleOAuthCallback();
         token = exchangeCodeForToken(code);
+		todoStore.updateFromLocalStorage();
 	});
 
 
