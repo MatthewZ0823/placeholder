@@ -16,11 +16,11 @@ const todoToJSON = (todo: Todo) => {
 		completed: todo.completed,
 		date: todo.date?.toISOString() || null
 	});
-}
+};
 
 export const todosToJSON = (todos: Todo[]) => {
 	return JSON.stringify(todos.map(todoToJSON));
-}
+};
 
 const todoFromJSON = (todoJSON: string) => {
 	const todo = JSON.parse(todoJSON);
@@ -30,8 +30,8 @@ const todoFromJSON = (todoJSON: string) => {
 		completed: todo.completed,
 		date: todo.date ? dayjs(todo.date) : null
 	} as Todo;
-}
+};
 
 export const todosFromJSON = (todosJSON: string) => {
 	return JSON.parse(todosJSON).map(todoFromJSON);
-}
+};
