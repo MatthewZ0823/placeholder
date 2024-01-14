@@ -20,7 +20,7 @@
 		fetch(`https://discord.com/api/v10/channels/1195809970281775187/messages`, {
 			method: 'GET',
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bot ${token}`,
 				'Content-Type': 'application/json',
 			},
 		})
@@ -38,6 +38,31 @@
 			console.error('Error:', error);
 		});
 	}
+
+    const sendMessage = async () => {
+        try {
+        const response = await fetch('https://discord.com/api/v10/channels/1195809970281775187/messages', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bot ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+            content: "Stop procrastinating!",
+            }),
+        });
+
+        if (response.ok) {
+            console.log('Message sent successfully!');
+        } else {
+            console.error(`Failed to send message. Status code: ${response.status}`);
+        }
+        } catch (error) {
+        console.error('Error sending message:', error);
+        }
+  }
+
+    
 </script>
 
 <main>
@@ -51,6 +76,10 @@
 </main>
 <button on:click={getChannelMessages}>
 	Get Channel Messages
+</button>
+
+<button on:click={sendMessage}>
+    Send message
 </button>
 
 <style>
