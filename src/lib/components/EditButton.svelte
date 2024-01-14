@@ -10,7 +10,7 @@
 	let todoText: string = todo.text;
 
 	let show: boolean = false;
-	let dateString: string = '';
+	let dateString: string = todo.date?.format('YYYY-MM-DDTHH:mm') || '';
 
 	const toggleShow = (): void => {
 		show = !show;
