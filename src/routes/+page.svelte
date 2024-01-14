@@ -3,46 +3,41 @@
 	import Todo from '$lib/components/Todo.svelte';
 	import CreateTodo from '$lib/components/CreateTodo.svelte';
 	import todoStore from '$lib/store';
+	import { page } from '$app/stores';
 
-    let code = null;
-    let token = null; //after onMount, this becomes the access token used to access data from the user
+	let token: string;
+	$: {
+		// @ts-ignore
+		token = $page.data.session?.accessToken ?? '';
+		console.log(token);
+	}
 
 	onMount(() => {
-        code = handleOAuthCallback();
-        token = exchangeCodeForToken(code);
 		todoStore.updateFromLocalStorage();
 	});
 
-
-    function handleOAuthCallback(){
-        const authReq = new URLSearchParams(window.location.search);
-        const authCode = authReq.get('code');
-
-        return authCode;
-    }
-
-    function exchangeCodeForToken(code: any){
-        const tokenReq = new URLSearchParams({grant_type: 'authorization_code', 
-                                        code: code, 
-                                        redirect_uri: 'http://localhost:5175/', 
-                                        client_id: '1195809578366017707', 
-                                        client_secret: 'Uw2ijjjdptOv-gW9fEprk-SW_JI38hJ_'});    
-        
-        fetch('https://discord.com/api/oauth2/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: tokenReq, 
-        })  
-        .then(response => response.json())
-        .then(data => {
-            const token = data.access_token;
-            console.log('Access Token: ', token);
-            return token;
-        })
-        .catch(error => console.error('Error exchanging code for token: ', error));
-    }
+	const getChannelMessages = () => {
+		fetch(`https://discord.com/api/v10/channels/1195809970281775187/messages`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+		})
+		.then((response) => {
+			if (!response.ok) {
+				console.error(response);
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			return response.json();
+		})
+		.then((data) => {
+			console.log('API Response:', data);
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}
 </script>
 
 <main>
@@ -54,6 +49,9 @@
 		<Todo {todo} />
 	{/each}
 </main>
+<button on:click={getChannelMessages}>
+	Get Channel Messages
+</button>
 
 <style>
 	main {
