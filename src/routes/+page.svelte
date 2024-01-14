@@ -13,6 +13,17 @@
 		todoStore.updateFromLocalStorage();
 	});
 
+	$: {
+		$todoStore.forEach(todo => {
+			if (todo.date === null) return;
+			if (todo.date.isBefore()) return;
+
+			setTimeout(() => {
+				console.log(todo.text);
+			}, todo.date?.diff());
+		});
+	}
+
 
     function handleOAuthCallback(){
         const authReq = new URLSearchParams(window.location.search);

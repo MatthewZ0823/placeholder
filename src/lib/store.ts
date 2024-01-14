@@ -10,8 +10,6 @@ function createTodoStore() {
 
 	const updateFromLocalStorage = () => {
 		const fromLocal = todosFromJSON(localStorage.getItem('todos') || '[]')
-		console.log(fromLocal)
-		console.log('updateFromLocalStorage')
 		set(fromLocal);
 	};
 
@@ -21,10 +19,6 @@ function createTodoStore() {
 			localStorage.setItem('todos', todosToJSON(newTodos));
 			return newTodos;
 		});
-
-		const fromLocal = todosFromJSON(localStorage.getItem('todos') || '[]')
-		console.log('updatePlusLocalStorage')
-		console.log(fromLocal)
 	}
 
 	const createTodo = (text: string) => {
