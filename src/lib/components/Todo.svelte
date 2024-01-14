@@ -1,5 +1,7 @@
 <script lang="ts">
 	import todoStore from '$lib/store';
+	import EditButton from '$lib/components/EditButton.svelte';
+	import type { Todo } from '$lib/types';
 	export let todo: Todo;
 
 	let hovering = false;
@@ -20,7 +22,8 @@
 	/>
 	<span class={todo.completed ? 'line-through text-gray-400' : ''}>{todo.text}</span>
 	{#if hovering}
-		<button class="btn btn-circle btn-sm ml-auto" on:click={() => todoStore.deleteTodo(todo.id)}>
+		<EditButton {todo} />
+		<button class="btn btn-circle btn-sm" on:click={() => todoStore.deleteTodo(todo.id)}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-4 w-4"

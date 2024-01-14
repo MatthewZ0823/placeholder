@@ -10,14 +10,18 @@
 		}
 	}
 
-    function handleKeyPress(event: KeyboardEvent) {
-        if (event.key === 'Enter') {
-            addTodo();
-        }
-    }
+	function handleKeyPress(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			addTodo();
+		}
+	}
 </script>
 
 <div class="mb-4">
-	<input bind:value={newTodo} on:keydown={handleKeyPress} placeholder="Add a new todo" class="input input-bordered" />
-	<button on:click={addTodo} class="btn btn-primary ml-2">Add Todo</button>
+	<input
+		bind:value={newTodo}
+		on:keydown={handleKeyPress}
+		placeholder="Add a new todo"
+		class="input input-bordered"
+	/>
 </div>

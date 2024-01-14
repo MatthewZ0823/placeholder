@@ -1,5 +1,7 @@
 import type { Writable } from 'svelte/store';
 import { writable } from 'svelte/store';
+import type { Todo } from './types';
+import type { Dayjs } from 'dayjs';
 
 function createTodoStore() {
 	const todoStore: Writable<Todo[]> = writable([]);
@@ -9,7 +11,8 @@ function createTodoStore() {
 		const todo = {
 			id: new Date().getTime(),
 			text,
-			completed: false
+			completed: false,
+			date: null
 		};
 
 		update((todos) => [...todos, todo]);
@@ -29,13 +32,27 @@ function createTodoStore() {
 		});
 	};
 
+	const editTodoText = (id: number, text: string) => {
+		update((todos) => {
+			return todos.map((todo: Todo) => (todo.id === id ? { ...todo, text } : todo));
+		});
+	};
+
+	const editTodoDate = (id: number, date: Dayjs) => {
+		update((todos) => {
+			return todos.map((todo: Todo) => (todo.id === id ? { ...todo, date } : todo));
+		});
+	};
+
 	return {
 		subscribe,
 		set,
 		update,
 		createTodo,
 		toggleTodo,
-		deleteTodo
+		deleteTodo,
+		editTodoText,
+		editTodoDate
 	};
 }
 
